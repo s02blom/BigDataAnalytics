@@ -102,15 +102,15 @@ class CloneDetector {
         }
         
         file.instances = file.instances || [];
-        for (var file_chunk_index = 0; file_chunk_index < file.chunks.length; file_chunk_index++)
+        for (fileChunk in file.chunks)
         {
             for (compareChunk in compareFile.chunks)
             {
-                if (this.#chunkMatch(file.chunks[file_chunk_index], compareChunk))
+                if (this.#chunkMatch(fileChunk, compareChunk))
                 {
-                    clone = new Clone(file.name, 
-                                    compareFile.name, 
-                                    file.chunks[file_chunk_index], 
+                    clone = new Clone(file.name,
+                                    compareFile.name,
+                                    fileChunk,
                                     compareChunk);
                     file.instances.append(clone)
                 }
