@@ -8,6 +8,7 @@ version: "3.8"
 services:
   cs-generator:
     image: csgenerator
+    build: ./Containers/CodeStreamGenerator
     command: "TEST"
     volumes:
       - qc-volume:/QualitasCorpus
@@ -17,6 +18,7 @@ services:
 
   cs-consumer:
     image: csconsumer
+    build: ./Containers/CodeStreamConsumer/
     volumes:
       - ./Containers/CodeStreamConsumer/src:/app/src
     ports:
