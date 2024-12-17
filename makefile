@@ -12,7 +12,7 @@ corpusCheck: corpusVolume
 	@docker run -it -v qc-volume:/QualitasCorpus --name qc-getter corpusgetter
 
 codeStream: corpusVolume
-	@docker compose -f stream-of-code.yaml up
+	@docker compose -f stream-of-code.yaml up -d
 
 cljDetector: corpusVolume
 	@docker compose -f all-at-once.yaml up
@@ -28,5 +28,8 @@ doc:
 	@texi2pdf ./Documentation/Big-Data-Analytics.texi --command=@afourpaper -q -c -o ./Documentation/Big-Data-Analytics.pdf
 	@texi2any --html --no-split ./Documentation/Big-Data-Analytics.texi -o ./Documentation/Big-Data-Analytics.html
 
-clean:
-	@docker rm -f qc-getter cs-generator cs-consumer
+cleanStream:
+	@docker compose -f "./stream-of-code.yaml" down
+
+# clean:
+# 	@docker rm -f qc-getter stream/cs-generator stream/cs-consumer
