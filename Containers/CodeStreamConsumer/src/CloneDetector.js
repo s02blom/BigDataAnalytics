@@ -109,11 +109,11 @@ class CloneDetector {
             {
                 if (this.#chunkMatch(fileChunk, compareChunk))
                 {
-                    clone = new Clone(file.name,
+                    var clone = new Clone(file.name,
                                     compareFile.name,
                                     fileChunk,
                                     compareChunk);
-                    file.perFileInstance.append(clone);
+                    file.perFileInstance.push(clone);
                 }
             }
         }
@@ -145,7 +145,7 @@ class CloneDetector {
             if(!currentClone.maybeExpandWith(nextClone))
             {
                 currentExpandingCloneIndex = nextCloneIndex;
-                rootClones.append(file.perFileInstance[nextCloneIndex])
+                rootClones.push(file.perFileInstance[nextCloneIndex])
             }
         }
         file.perFileInstance = rootClones;
@@ -184,7 +184,7 @@ class CloneDetector {
             }
             else
             {
-                file.instances.append(fileClone);
+                file.instances.push(fileClone);
             }
         }
         return file;
