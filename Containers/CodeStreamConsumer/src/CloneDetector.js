@@ -100,8 +100,8 @@ class CloneDetector {
         {
             this.#chunkify(file)
         }
-        
-        file.instances = file.instances || [];
+
+        file.perFileInstance = []
         for (fileChunk in file.chunks)
         {
             for (compareChunk in compareFile.chunks)
@@ -112,7 +112,7 @@ class CloneDetector {
                                     compareFile.name,
                                     fileChunk,
                                     compareChunk);
-                    file.instances.append(clone)
+                    file.perFileInstance.append(clone)
                 }
             }
         }
