@@ -70,12 +70,13 @@ class CloneDetector {
     
     #chunkMatch(first, second) {
         let match = true;
-
         if (first.length != second.length) { match = false; }
-        for (let idx=0; idx < first.length; idx++) {
-            if (!first[idx].equals(second[idx])) { match = false; }
+        else 
+        {
+            for (let idx=0; idx < first.length; idx++) {
+                if (!first[idx].equals(second[idx])) { match = false; }
+            }
         }
-
         return match;
     }
 
@@ -102,9 +103,9 @@ class CloneDetector {
         }
 
         file.perFileInstance = [];
-        for (fileChunk in file.chunks)
+        for (var fileChunk of file.chunks)
         {
-            for (compareChunk in compareFile.chunks)
+            for (var compareChunk of compareFile.chunks)
             {
                 if (this.#chunkMatch(fileChunk, compareChunk))
                 {
