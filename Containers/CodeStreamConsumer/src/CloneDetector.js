@@ -94,14 +94,14 @@ class CloneDetector {
 
         if (file.chunks === undefined)
         {
-            this.#chunkify(file)
+            this.#chunkify(file);
         }
         if (compareFile.chunks === undefined)
         {
-            this.#chunkify(file)
+            this.#chunkify(file);
         }
 
-        file.perFileInstance = []
+        file.perFileInstance = [];
         for (fileChunk in file.chunks)
         {
             for (compareChunk in compareFile.chunks)
@@ -112,7 +112,7 @@ class CloneDetector {
                                     compareFile.name,
                                     fileChunk,
                                     compareChunk);
-                    file.perFileInstance.append(clone)
+                    file.perFileInstance.append(clone);
                 }
             }
         }
@@ -164,7 +164,7 @@ class CloneDetector {
         //
         // Return: file, with file.instances containing unique Clone objects that may contain several targets
         //
-
+        file.instances = file.instances || [];
         return file;
     }
     
