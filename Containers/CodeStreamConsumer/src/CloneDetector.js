@@ -165,6 +165,27 @@ class CloneDetector {
         // Return: file, with file.instances containing unique Clone objects that may contain several targets
         //
         file.instances = file.instances || [];
+        var fileClone;
+        for (instancesClone in file.instances)
+        {
+            var equivalentCloneFound = false;
+            for (fileClone in file.perFileInstance)
+            {
+                if (instancesClone.equals(fileClone))
+                {
+                    equivalentCloneFound = true;
+                    break;
+                }
+            }
+            if (equivalentCloneFound)
+            {
+                instancesClone.addTarge(fileClone);
+            }
+            else
+            {
+                file.instances.append(fileClone);
+            }
+        }
         return file;
     }
     
