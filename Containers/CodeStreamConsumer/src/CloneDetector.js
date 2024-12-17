@@ -134,7 +134,20 @@ class CloneDetector {
         // Return: file, with file.instances only including Clones that have been expanded as much as they can,
         //         and not any of the Clones used during that expansion.
         //
-
+        var currentExpandingCloneIndex = 0;
+        var rootClones = [file.perFileInstance[0]];
+        for (var index = 0; index < file.instances.length - 1; index++)
+        {
+            var nextCloneIndex = index + 1;
+            var currentClone = file.perFileInstance[currentExpandingCloneIndex];
+            var nextClone = file.perFileInstance[nextCloneIndex];
+            if(!currentClone.maybeExpandWith(nextClone))
+            {
+                currentExpandingCloneIndex = nextCloneIndex;
+                rootClones.append(file.perFileInstance[nextCloneIndex])
+            }
+        }
+        file.perFileInstance = rootClones;
         return file;
     }
     
