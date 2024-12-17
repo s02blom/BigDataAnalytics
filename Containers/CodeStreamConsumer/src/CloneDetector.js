@@ -104,14 +104,14 @@ class CloneDetector {
         file.instances = file.instances || [];
         for (var file_chunk_index = 0; file_chunk_index < file.chunks.length; file_chunk_index++)
         {
-            for (var compareFile_chunk_index = 0; compareFile_chunk_index < compareFile.chunks.length; compareFile_chunk_index++)
+            for (compareChunk in compareFile.chunks)
             {
-                if (this.#chunkMatch(file.chunks[file_chunk_index], compareFile.chunks[compareFile_chunk_index]))
+                if (this.#chunkMatch(file.chunks[file_chunk_index], compareChunk))
                 {
                     clone = new Clone(file.name, 
                                     compareFile.name, 
                                     file.chunks[file_chunk_index], 
-                                    compareFile.chunks[compareFile_chunk_index]);
+                                    compareChunk);
                     file.instances.append(clone)
                 }
             }
