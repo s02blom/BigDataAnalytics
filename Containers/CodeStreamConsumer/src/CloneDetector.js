@@ -90,10 +90,33 @@ class CloneDetector {
         // TIP 3: Remember that file.instances may have already been created, so only append to it.
         //
         // Return: file, including file.instances which is an array of Clone objects (or an empty array).
-        //
+        // 
 
-        file.instances = file.instances || [];        
-        file.instances = file.instances.concat(newInstances);
+        if (file.chunks === undefined)
+        {
+            this.#chunkify(file)
+        }
+        if (compareFile.chunks === undefined)
+        {
+            this.#chunkify(file)
+        }
+        
+        file.instances = file.instances || [];
+        for (var file_chunk_index = 0; file_chunk_index < file.chunks.length; file_chunk_index++)
+        {
+            for (var compareFile_chunk_index = 0; compareFile_chunk_index < compareFile.chunks.length; compareFile_chunk_index++)
+            {
+                if (this.#chunkMatch(file.chunks[file_chunk_index], compareFile.chunks[compareFile_chunk_index]))
+                {
+                    clone = new Clone(file.name, 
+                                    compareFile.name, 
+                                    file.chunks[file_chunk_index], 
+                                    compareFile.chunks[compareFile_chunk_index]);
+                    file.instances.append(clone)
+                }
+            }
+        }
+        //file.instances = file.instances.concat(newInstances);
         return file;
     }
      
