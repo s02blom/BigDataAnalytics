@@ -142,7 +142,12 @@ class CloneDetector {
         //
         console.log(`\n\n--------------- Expanding clones ---------------`)
         var currentExpandingCloneIndex = 0;
+        if (!file.perFileInstance.length)
+        {
+            return file
+        }
         var rootClones = [file.perFileInstance[0]];
+        var currentExpandingCloneIndex = 0;
         for (var index = 0; index < file.perFileInstance.length - 1; index++)
         {
             var nextCloneIndex = index + 1;
@@ -179,6 +184,10 @@ class CloneDetector {
         console.log(`\n\n--------------- Consolidating clones ---------------`)
 
         file.instances = file.instances || [];
+        if (!file.perFileInstance.length)
+        {
+            return file
+        }
         var fileClone, instancesClone;
         for (fileClone of file.perFileInstance)
         {
