@@ -81,19 +81,9 @@ class CloneDetector {
     }
 
     #filterCloneCandidates(file, compareFile) {
-        // TODO
-        // For each chunk in file.chunks, find all #chunkMatch() in compareFile.chunks
-        // For each matching chunk, create a new Clone.
-        // Store the resulting (flat) array in file.instances.
-        // 
-        // TIP 1: Array.filter to find a set of matches, Array.map to return a new array with modified objects.
-        // TIP 2: You can daisy-chain calls to filter().map().filter().flat() etc.
-        // TIP 3: Remember that file.instances may have already been created, so only append to it.
-        //
-        // Return: file, including file.instances which is an array of Clone objects (or an empty array).
-        // 
-
-        //console.log(`\n\n--------------- Filtering clones ---------------`)
+        /*
+        By comparing the two files chunk by chunk we find all the potential clones.
+        */
         if (file.chunks === undefined)
         {
             this.#chunkify(file);
@@ -110,38 +100,22 @@ class CloneDetector {
             {
                 if (this.#chunkMatch(fileChunk, compareChunk))
                 {
-                    //console.log(`Found clone in file: ${file.name} and ${compareFile.name}`)
-                    
                     var clone = new Clone(file.name,
                                     compareFile.name,
                                     fileChunk,
                                     compareChunk);
-                    //console.log(`New clone is: ${clone.sourceName} - ${clone.targets[0].name} @ ${clone.sourceStart}-${clone.sourceEnd} to ${clone.targets[0].startLine}-${clone.targets[0].startLine + (clone.sourceEnd - clone.sourceStart)}`)
                     file.perFileInstance.push(clone);
                     break;
                 }
             }
         }
-        //file.instances = file.instances.concat(newInstances);
         return file;
     }
      
     #expandCloneCandidates(file) {
-        // TODO
-        // For each Clone in file.instances, try to expand it with every other Clone
-        // (using Clone::maybeExpandWith(), which returns true if it could expand)
-        // 
-        // Comment: This should be doable with a reduce:
-        //          For every new element, check if it overlaps any element in the accumulator.
-        //          If it does, expand the element in the accumulator. If it doesn't, add it to the accumulator.
-        //
-        // ASSUME: As long as you traverse the array file.instances in the "normal" order, only forward expansion is necessary.
-        // 
-        // Return: file, with file.instances only including Clones that have been expanded as much as they can,
-        //         and not any of the Clones used during that expansion.
-        //
-        console.log(`\n\n--------------- Expanding clones ---------------`)
-        var currentExpandingCloneIndex = 0;
+        /* 
+        We minimize the clones if they are right next to one another, combining them into one clone instead of several
+        */
         if (!file.perFileInstance.length)
         {
             return file
@@ -155,13 +129,8 @@ class CloneDetector {
             var nextClone = file.perFileInstance[nextCloneIndex];
             if(!currentClone.maybeExpandWith(nextClone))
             {
-                console.log(`Did not expand clone ${currentClone.sourceName}:${currentClone.sourceStart}-${currentClone.sourceEnd} with ${nextClone.sourceName}:${nextClone.sourceStart}-${nextClone.sourceEnd} (${nextClone.targets[0].name}:${currentClone.targets[0].startLine})`)
                 currentExpandingCloneIndex = nextCloneIndex;
                 rootClones.push(file.perFileInstance[nextCloneIndex])
-            }
-            else
-            {
-                console.log(`Expanded ${currentClone.sourceName}:${currentClone.sourceStart}-${currentClone.sourceEnd} with ${nextClone.sourceName}:${nextClone.sourceStart}-${nextClone.sourceEnd} (${nextClone.targets[0].name}:${currentClone.targets[0].startLine})`)
             }
         }
         file.perFileInstance = rootClones;
@@ -169,25 +138,16 @@ class CloneDetector {
     }
     
     #consolidateClones(file) {
-        // TODO
-        // For each clone, accumulate it into an array if it is new
-        // If it isn't new, update the existing clone to include this one too
-        // using Clone::addTarget()
-        // 
-        // TIP 1: Array.reduce() with an empty array as start value.
-        //        Push not-seen-before clones into the accumulator
-        // TIP 2: There should only be one match in the accumulator
-        //        so Array.find() and Clone::equals() will do nicely.
-        //
-        // Return: file, with file.instances containing unique Clone objects that may contain several targets
-        //
-        console.log(`\n\n--------------- Consolidating clones ---------------`)
+        /*
+        Checkin the new clone with previously discovered clone to se if the clone already exists in the list, if so we add it to the targets. 
+        */
 
         file.instances = file.instances || [];
         if (!file.perFileInstance.length)
         {
             return file
         }
+
         var fileClone, instancesClone;
         for (fileClone of file.perFileInstance)
         {
@@ -202,12 +162,10 @@ class CloneDetector {
             }
             if (equivalentCloneFound)
             {
-                console.log(`Consolidating ${fileClone.sourceName}:${fileClone.sourceStart}-${fileClone.sourceEnd} into ${instancesClone.sourceName}:${instancesClone.sourceStart}-${instancesClone.sourceEnd}`)
                 instancesClone.addTarget(fileClone);
             }
             else
             {
-                console.log(`Adding ${fileClone.sourceName}:${fileClone.sourceStart}-${fileClone.sourceEnd} as a new clone`)
                 file.instances.push(fileClone);
             }
         }
@@ -252,16 +210,8 @@ class CloneDetector {
             //
             // 3. If the same clone is found in several places, consolidate them into one Clone.
             //
-            console.log(`\n\n--------------------------- ${file.name} - ${f.name} ---------------------------`)
             file = this.#filterCloneCandidates(file, f); 
             file = this.#expandCloneCandidates(file);
-
-            console.log(`\n\n--------------- After expanding clones ---------------`)
-            for (var clone of file.perFileInstance)
-            {
-                console.log(`${clone.sourceName}:${clone.sourceStart}-${clone.sourceEnd} @ ${clone.targets[0].name}:${clone.targets[0].startLine}`)
-            }
-            
             file = this.#consolidateClones(file); 
         }
 

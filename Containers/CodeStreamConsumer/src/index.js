@@ -116,7 +116,7 @@ function maybePrintStatistics(file, cloneDetector, cloneStore) {
             str += t + ': ' + (timers[t] / (1000n)) + ' µs '
         }
         console.log(str);
-        console.log('List of found clones available at', URL);
+        //console.log('List of found clones available at', URL);
     }
 
     return file;
