@@ -29,6 +29,7 @@ if [[ "$1" == "TEST" ]]; then
   sendFile ./test/B.java
   sendFile ./test/C.java
   sendFile ./test/D.java
+  sendFile ./test/E.java
   echo "Sent test files. Sleeping before continuing..."
   sleep 10
 fi
