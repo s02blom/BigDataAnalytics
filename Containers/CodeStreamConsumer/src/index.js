@@ -39,7 +39,7 @@ function getStatistics() {
 
 function lastFileTimersHTML() {
     if (!lastFile) return '';
-    output = '<p>Timers for last file processed:</p>\n<ul>\n'
+    output = `<p>Timers for last file processed: ${lastFile.name}</p>\n<ul>\n`
     let timers = Timer.getTimers(lastFile);
     for (t in timers) {
         output += '<li>' + t + ': ' + (timers[t] / (1000n)) + ' µs\n'
@@ -85,8 +85,8 @@ function viewClones(req, res, next) {
     page += '<BODY><H1>CodeStream Clone Detector</H1>\n';
     page += '<P>' + getStatistics() + '</P>\n';
     page += lastFileTimersHTML() + '\n';
-    page += listClonesHTML() + '\n';
-    page += listProcessedFilesHTML() + '\n';
+    // page += listClonesHTML() + '\n';
+    // page += listProcessedFilesHTML() + '\n';
     page += '</BODY></HTML>';
     res.send(page);
 }
