@@ -93,6 +93,7 @@ class CloneDetector {
         // Return: file, including file.instances which is an array of Clone objects (or an empty array).
         // 
 
+        //console.log(`\n\n--------------- Filtering clones ---------------`)
         if (file.chunks === undefined)
         {
             this.#chunkify(file);
@@ -109,11 +110,15 @@ class CloneDetector {
             {
                 if (this.#chunkMatch(fileChunk, compareChunk))
                 {
+                    //console.log(`Found clone in file: ${file.name} and ${compareFile.name}`)
+                    
                     var clone = new Clone(file.name,
                                     compareFile.name,
                                     fileChunk,
                                     compareChunk);
+                    //console.log(`New clone is: ${clone.sourceName} - ${clone.targets[0].name} @ ${clone.sourceStart}-${clone.sourceEnd} to ${clone.targets[0].startLine}-${clone.targets[0].startLine + (clone.sourceEnd - clone.sourceStart)}`)
                     file.perFileInstance.push(clone);
+                    break;
                 }
             }
         }
@@ -135,17 +140,23 @@ class CloneDetector {
         // Return: file, with file.instances only including Clones that have been expanded as much as they can,
         //         and not any of the Clones used during that expansion.
         //
+        console.log(`\n\n--------------- Expanding clones ---------------`)
         var currentExpandingCloneIndex = 0;
         var rootClones = [file.perFileInstance[0]];
-        for (var index = 0; index < file.instances.length - 1; index++)
+        for (var index = 0; index < file.perFileInstance.length - 1; index++)
         {
             var nextCloneIndex = index + 1;
             var currentClone = file.perFileInstance[currentExpandingCloneIndex];
             var nextClone = file.perFileInstance[nextCloneIndex];
             if(!currentClone.maybeExpandWith(nextClone))
             {
+                console.log(`Did not expand clone ${currentClone.sourceName}:${currentClone.sourceStart}-${currentClone.sourceEnd} with ${nextClone.sourceName}:${nextClone.sourceStart}-${nextClone.sourceEnd} (${nextClone.targets[0].name}:${currentClone.targets[0].startLine})`)
                 currentExpandingCloneIndex = nextCloneIndex;
                 rootClones.push(file.perFileInstance[nextCloneIndex])
+            }
+            else
+            {
+                console.log(`Expanded ${currentClone.sourceName}:${currentClone.sourceStart}-${currentClone.sourceEnd} with ${nextClone.sourceName}:${nextClone.sourceStart}-${nextClone.sourceEnd} (${nextClone.targets[0].name}:${currentClone.targets[0].startLine})`)
             }
         }
         file.perFileInstance = rootClones;
@@ -165,12 +176,14 @@ class CloneDetector {
         //
         // Return: file, with file.instances containing unique Clone objects that may contain several targets
         //
+        console.log(`\n\n--------------- Consolidating clones ---------------`)
+
         file.instances = file.instances || [];
-        var fileClone;
-        for (instancesClone in file.instances)
+        var fileClone, instancesClone;
+        for (fileClone of file.perFileInstance)
         {
             var equivalentCloneFound = false;
-            for (fileClone in file.perFileInstance)
+            for (instancesClone of file.instances)
             {
                 if (instancesClone.equals(fileClone))
                 {
@@ -180,10 +193,12 @@ class CloneDetector {
             }
             if (equivalentCloneFound)
             {
-                instancesClone.addTarge(fileClone);
+                console.log(`Consolidating ${fileClone.sourceName}:${fileClone.sourceStart}-${fileClone.sourceEnd} into ${instancesClone.sourceName}:${instancesClone.sourceStart}-${instancesClone.sourceEnd}`)
+                instancesClone.addTarget(fileClone);
             }
             else
             {
+                console.log(`Adding ${fileClone.sourceName}:${fileClone.sourceStart}-${fileClone.sourceEnd} as a new clone`)
                 file.instances.push(fileClone);
             }
         }
@@ -228,8 +243,16 @@ class CloneDetector {
             //
             // 3. If the same clone is found in several places, consolidate them into one Clone.
             //
+            console.log(`\n\n--------------------------- ${file.name} - ${f.name} ---------------------------`)
             file = this.#filterCloneCandidates(file, f); 
             file = this.#expandCloneCandidates(file);
+
+            console.log(`\n\n--------------- After expanding clones ---------------`)
+            for (var clone of file.perFileInstance)
+            {
+                console.log(`${clone.sourceName}:${clone.sourceStart}-${clone.sourceEnd} @ ${clone.targets[0].name}:${clone.targets[0].startLine}`)
+            }
+            
             file = this.#consolidateClones(file); 
         }
 
