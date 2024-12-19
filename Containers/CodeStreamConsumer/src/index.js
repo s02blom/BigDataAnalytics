@@ -1,6 +1,7 @@
 const express = require('express');
 const formidable = require('formidable');
 const fs = require('fs/promises');
+const chart = require("chart.js");
 const app = express();
 const PORT = 3000;
 
