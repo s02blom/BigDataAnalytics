@@ -26,6 +26,7 @@ function fileReceiver(req, res, next) {
 
 app.get('/', viewClones );
 
+app.get("/timers", viewTimers );
 const server = app.listen(PORT, () => { console.log('Listening for files on port', PORT); });
 
 
@@ -91,6 +92,22 @@ function viewClones(req, res, next) {
     page += '</BODY></HTML>';
     res.send(page);
 }
+
+// Page generation for viewing current progress
+// --------------------
+function plotTimesHtml()
+{
+    
+}
+
+function viewTimers(req, res, next)
+{
+    let page='<HTML><HEAD><TITLE>CodeStream Clone Detector</TITLE></HEAD>\n';
+    page += '<BODY><H1>CodeStream Timers<H1>\n';
+    page += '</BODY></HTML>'
+    res.send(page);
+}
+
 
 // Some helper functions
 // --------------------
