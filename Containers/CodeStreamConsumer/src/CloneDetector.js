@@ -120,17 +120,15 @@ class CloneDetector {
         {
             return file
         }
-        var rootClones = [file.perFileInstance[0]];
-        var currentExpandingCloneIndex = 0;
-        for (var index = 0; index < file.perFileInstance.length - 1; index++)
+        var currentClone = file.perFileInstance[0];
+        var rootClones = [currentClone];
+        for (var index = 1; index < file.perFileInstance.length; index++)
         {
-            var nextCloneIndex = index + 1;
-            var currentClone = file.perFileInstance[currentExpandingCloneIndex];
-            var nextClone = file.perFileInstance[nextCloneIndex];
+            var nextClone = file.perFileInstance[index];
             if(!currentClone.maybeExpandWith(nextClone))
             {
-                currentExpandingCloneIndex = nextCloneIndex;
-                rootClones.push(file.perFileInstance[nextCloneIndex])
+                currentClone = file.perFileInstance[index];
+                rootClones.push(currentClone)
             }
         }
         file.perFileInstance = rootClones;
