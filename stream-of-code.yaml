@@ -13,7 +13,7 @@ services:
     volumes:
       - qc-volume:/QualitasCorpus
     environment:
-      DELAY: 100
+      DELAY: 0.1
       TARGET: "cs-consumer:3000"
 
   cs-consumer:
@@ -23,6 +23,8 @@ services:
       - ./Containers/CodeStreamConsumer/src:/app/src
     ports:
       - 8080:3000
+    environment:
+      CHUNKSIZE: 10
 
 volumes:
   qc-volume:
