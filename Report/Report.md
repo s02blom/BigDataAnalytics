@@ -1,3 +1,3 @@
 1. I was not able to go throught the entirety of Qualitas Corpus. I would usually stop dead at ca 3000 clones at which point I don't think that they manage to get through all the files any more before a new request came in that had to be handels, and thus the old one was abandoned. Optimization is the name of the game in that case. 
 2. Well at one point we have to compare all the lines agains one another however if we do it in larger chunks we get fewer total chunks to compare with meaning fewer comparisons as we compare every chunch with every other chunk from the other file. 
-3. 
+3. The tile are increasig with every file that is added. For every file added we need to go throught every other file and go through the enrity of that files content. Meaning we have roughly O(n^2) in complexity. 
