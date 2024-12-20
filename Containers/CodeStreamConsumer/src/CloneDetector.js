@@ -105,7 +105,7 @@ class CloneDetector {
                                     fileChunk,
                                     compareChunk);
                     file.perFileInstance.push(clone);
-                    break;
+                    //break;
                 }
             }
         }
@@ -122,12 +122,25 @@ class CloneDetector {
         }
         var currentClone = file.perFileInstance[0];
         var rootClones = [currentClone];
+        var copyList = file.perFileInstance.slice(1);
         for (var index = 1; index < file.perFileInstance.length; index++)
         {
-            var nextClone = file.perFileInstance[index];
-            if(!currentClone.maybeExpandWith(nextClone))
+            var subsumedClones = [];
+            for (var clone of copyList)
+            {                
+                if(currentClone.maybeExpandWith(clone))
+                {
+                    subsumedClones.push(clone);
+                }
+            }
+            for (var clone of subsumedClones)
             {
-                currentClone = file.perFileInstance[index];
+                var i = copyList.indexOf(clone);
+                copyList.splice(i, 1); 
+            }
+            if (copyList.length > 0)
+            {
+                currentClone = copyList.shift();
                 rootClones.push(currentClone)
             }
         }
@@ -137,7 +150,7 @@ class CloneDetector {
     
     #consolidateClones(file) {
         /*
-        Checkin the new clone with previously discovered clone to se if the clone already exists in the list, if so we add it to the targets. 
+        Checkin the new clone with previously discovered clone to see if the clone already exists in the list, if so we add it to the targets. 
         */
 
         file.instances = file.instances || [];
