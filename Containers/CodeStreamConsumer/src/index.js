@@ -10,6 +10,8 @@ const CloneDetector = require('./CloneDetector');
 const CloneStorage = require('./CloneStorage');
 const FileStorage = require('./FileStorage');
 
+// Chart datasets
+var totalTime = []
 
 // Express and Formidable stuff to receice a file for further processing
 // --------------------
@@ -95,16 +97,31 @@ function viewClones(req, res, next) {
 
 // Page generation for viewing current progress
 // --------------------
-function plotTimesHtml()
+
+function addTimeToTotalTime(file)
 {
-    
+    totalTime.push(file.timers['total'])
 }
 
 function viewTimers(req, res, next)
 {
-    let page='<HTML><HEAD><TITLE>CodeStream Clone Detector</TITLE></HEAD>\n';
-    page += '<BODY><H1>CodeStream Timers<H1>\n';
-    page += '</BODY></HTML>'
+    // let page='<HTML><HEAD><TITLE>CodeStream Clone Detector</TITLE></HEAD>\n';
+    // page += '<BODY><H1>CodeStream Timers<H1>\n';
+    // page += `<div> <canvas id="totalTime"></div>`
+    // page += '</BODY></HTML>'
+    
+    totalTimeChart = new chart.Chart(
+        document.getElementById('totalTime'),
+        {
+            type: 'line',
+            data: {
+                datasets: [{
+                    data: totalTime
+                }]
+            }
+        }
+    );
+    
     res.send(page);
 }
 
@@ -153,12 +170,13 @@ function processFile(filename, contents) {
         .then( (file) => cd.transform(file) )
 
         .then( (file) => Timer.startTimer(file, 'match') )
-        .then( (file) => cd.matchDetect(file) )
+        // .then( (file) => cd.matchDetect(file) )
         .then( (file) => cloneStore.storeClones(file) )
         .then( (file) => Timer.endTimer(file, 'match') )
 
         .then( (file) => cd.storeFile(file) )
         .then( (file) => Timer.endTimer(file, 'total') )
+        .then( (file) => addTimeToTotalTime(file) )
         .then( PASS( (file) => lastFile = file ))
         .then( PASS( (file) => maybePrintStatistics(file, cd, cloneStore) ))
     // TODO Store the timers from every file (or every 10th file), create a new landing page /timers
