@@ -4,6 +4,7 @@ version: "3.8"
 services:
   clone-detector:
     image: cljdetector
+    build: ./Containers/cljdetector
     command: clear 
     ports:
       - 8080:3000

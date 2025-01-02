@@ -31,5 +31,8 @@ doc:
 cleanStream:
 	@docker compose -f "./stream-of-code.yaml" down
 
+cleanCljDetector:
+	@docker compose -f "./all-at-once.yaml" downs
+
 # clean:
 # 	@docker rm -f qc-getter stream/cs-generator stream/cs-consumer
