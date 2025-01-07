@@ -144,3 +144,11 @@
         collname "clones"
         anonymous-clone (select-keys clone [:numberOfInstances :instances])]
     (mc/insert db collname anonymous-clone)))
+
+(defn addUpdate! [message]
+  (let [db (mg/get-db conn dbname)
+        collname "updates"
+        anonymous-message (select-keys message [:numberOfInstances :instances])]
+    (mc/insert db collname anonymous-message)
+  ) 
+)
