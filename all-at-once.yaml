@@ -31,11 +31,10 @@ services:
       - dbconfig:/data/configdb
     
   progress-monitoring-web:
-    image: progress-monitoring-web
     build: ./Containters/cljMonitoring
     ports: 
       - 5000:5000
-    envoronment:
+    environment:
       FLASK_RUN_PORT: 5000
 
 volumes:
