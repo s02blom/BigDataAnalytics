@@ -17,6 +17,11 @@ codeStream: corpusVolume
 cljDetector: corpusVolume
 	@docker compose -f all-at-once.yaml up
 
+monitoring:
+	@docker compose -f all-at-once.yaml up dbstorage -d
+	@docker build "Containers/cljMonitoring" -t progress-monitoring-web
+	@docker run -p 5000:5000 progress-monitoring-web 
+
 mongodb:
 	@docker compose -f all-at-once.yaml up dbstorage
 
