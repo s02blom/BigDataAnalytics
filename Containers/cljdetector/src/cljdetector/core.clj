@@ -9,10 +9,17 @@
 (def source-type #".*\.java")
 
 (defn ts-println [& args]
-  (let [message (str (.toString (java.time.LocalDateTime/now)) args)]
-    (storage/addUpdate! message)
-    (println message))
+  (let [date (java.time.LocalDateTime/now)]
+    (let [message (str args)]
+      (storage/addUpdate! date message)
+      (println (.toString date) message)
+    )
+  )
 )
+  
+  ;;(let [message ((.toString (java.time.LocalDateTime/now)) args)]
+    ;;(storage/addUpdate! message)
+    ;;(println message)
 
 (defn maybe-clear-db [args]
   (when (some #{"CLEAR"} (map string/upper-case args))
