@@ -31,7 +31,9 @@ services:
       - dbconfig:/data/configdb
     
   progress-monitoring-web:
-    build: ./Containters/cljMonitoring
+    build: ./Containers/cljMonitoring/
+    volumes: 
+      - ./Containers/cljMonitoring/:/monitoring
     ports: 
       - 5000:5000
     environment:
