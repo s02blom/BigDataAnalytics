@@ -4,4 +4,4 @@ blueprint = Blueprint("main", __name__)
 
 @blueprint.route("/", methods=["GET"])
 def home():
-    return render_template()
+    return render_template("home.html")
