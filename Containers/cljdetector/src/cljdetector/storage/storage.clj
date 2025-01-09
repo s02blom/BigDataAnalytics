@@ -150,7 +150,7 @@
         db (mg/get-db conn dbname)
         collname "updates"
         anonymous-message {
-          "date"  (.toString date),
+          "date" date
           "message" message
         }]
         ;; anonymous-message (select-keys date [:date :message])]
