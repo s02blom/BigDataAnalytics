@@ -27,5 +27,9 @@ def create_app(test_config=None):
     app.app_context().push()
     return app
 
-app = create_app()
-register_blueprints(app)
+def main():
+    app = create_app()
+    register_blueprints(app)
+
+
+main()
