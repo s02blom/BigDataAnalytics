@@ -7,7 +7,6 @@ def get_connection() -> pymongo.synchronous.database.Database:
     try:
         client = MongoClient(environ.get("DATABASE_HOST"), int(environ.get("DATABASE_PORT")))
         db = client[environ.get("DATABASE_NAME")]
-        db.client.close()
     except Exception as err:
         print(err)
     return db
