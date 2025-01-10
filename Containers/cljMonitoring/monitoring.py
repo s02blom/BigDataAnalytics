@@ -1,7 +1,7 @@
 import os
 from flask import Flask
 
-def register_blueprints(app):
+def register_blueprints(app: Flask):
     from . import routes
     print("Registering blueprints...")
     app.register_blueprint(routes.blueprint)
