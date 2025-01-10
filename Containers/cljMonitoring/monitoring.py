@@ -1,5 +1,10 @@
 import os
+from time import sleep
 from flask import Flask
+from timers import CollectionTimer
+from db import get_connection
+
+COLLECTIONS = ["files", "chunks", "candidates", "clones"]
 
 def register_blueprints(app: Flask):
     from . import routes
@@ -30,6 +35,11 @@ def create_app(test_config=None):
 def main():
     app = create_app()
     register_blueprints(app)
-
+    sleep(15)   # Sleeping for 15s to ensure that the database has had time to start up
+    timers = {}
+    for name in COLLECTIONS:
+        new_connection = get_connection()
+        timer = CollectionTimer(collection_name=name, database=new_connection, interval=os.environ.get("SAMPLE_RATE"))
+        timers[name] = timer
 
 main()
