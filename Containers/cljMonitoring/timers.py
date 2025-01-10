@@ -40,7 +40,7 @@ class CollectionTimer(Timer):
         """
         self.collection_name = collection_name
         self.database = database
-        self.interval = interval
+        self.interval = int(interval)
         self.data = []
         super().__init__()
 

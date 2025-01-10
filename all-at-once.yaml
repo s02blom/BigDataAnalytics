@@ -42,6 +42,7 @@ services:
       DATABASE_PORT: "27017"
       DATABASE_HOST: "dbstorage"
       DATABASE_NAME: "cloneDetector"
+      SAMPLE_RATE: 10
 
 volumes:
   dbstorage:
