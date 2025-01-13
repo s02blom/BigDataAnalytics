@@ -20,7 +20,7 @@ services:
 
   dbstorage:
     image: mongo
-    restart: always
+    restart: unless-stopped   #Was always but this is to prevent it from starting upon startup of my computer
     command: --quiet --syslog
     ports:
       - 27017:27017
