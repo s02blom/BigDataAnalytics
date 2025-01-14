@@ -46,4 +46,4 @@ def main():
 
     return app
 
-main()
+app = main()
