@@ -35,11 +35,15 @@ def create_app(test_config=None):
 def main():
     app = create_app()
     register_blueprints(app)
+    print("Sleeping to wait for database start up", flush=True)
     sleep(15)   # Sleeping for 15s to ensure that the database has had time to start up
     timers = {}
     for name in COLLECTIONS:
         new_connection = get_connection()
         timer = CollectionTimer(collection_name=name, database=new_connection, interval=os.environ.get("SAMPLE_RATE"))
+        timer.start()
         timers[name] = timer
+
+    return app
 
 main()
