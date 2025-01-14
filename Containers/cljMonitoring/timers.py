@@ -44,7 +44,7 @@ class CollectionTimer(Timer):
         self.collection_name = collection_name
         self.database = database
         self.interval = int(interval)
-        self.data: pd.DataFrame = pd.DataFrame(columns=["count", "time"])
+        self.data = {"count": [], "time": []}
         super().__init__()
 
     def timer(self) -> None:
@@ -55,8 +55,12 @@ class CollectionTimer(Timer):
         collection = self.database[self.collection_name]
         count = collection.count_documents({})
         timestamp = time.localtime()
-        data_entry = {"count": count, "time": timestamp}
-        self.data.append(data_entry, ignore_index = True)
+        self.data["count"].append(count)
+        self.data["time"].append(timestamp)
+        
+
+    def get_dataframe(self) -> pd.DataFrame:
+        return pd.DataFrame(self.data, columns=["count", "time"])
 
     def stop(self):
         """Stops the timer and closes the database connection. """
