@@ -1,7 +1,7 @@
 import threading
 import time
 from . import db
-
+import pandas as pd
 
 class Timer(threading.Thread):
 
@@ -44,7 +44,7 @@ class CollectionTimer(Timer):
         self.collection_name = collection_name
         self.database = database
         self.interval = int(interval)
-        self.data = []
+        self.data: pd.DataFrame = pd.DataFrame(columns=["count", "time"])
         super().__init__()
 
     def timer(self) -> None:
@@ -55,8 +55,8 @@ class CollectionTimer(Timer):
         collection = self.database[self.collection_name]
         count = collection.count_documents({})
         timestamp = time.localtime()
-        data_entry = [count, timestamp]
-        self.data.append(data_entry)
+        data_entry = {"count": count, "time": timestamp}
+        self.data.append(data_entry, ignore_index = True)
 
     def stop(self):
         """Stops the timer and closes the database connection. """

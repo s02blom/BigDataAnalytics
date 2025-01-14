@@ -1,8 +1,8 @@
 import os
 from time import sleep
 from flask import Flask
-from timers import CollectionTimer
-from db import get_connection
+from .timers import CollectionTimer
+from .db import get_connection
 
 COLLECTIONS = ["files", "chunks", "candidates", "clones"]
 
