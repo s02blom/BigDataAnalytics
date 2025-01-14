@@ -13,7 +13,10 @@ class Timer(threading.Thread):
     def run(self):
         while self._timer_runs.is_set():
             self.timer()
-            time.sleep(self.__class__.interval)
+            time.sleep(self.interval)
+
+    def timer():
+        return NotImplementedError
 
     def stop(self):
         self._timer_runs.clear()
@@ -49,7 +52,8 @@ class CollectionTimer(Timer):
         The function that is run once every interval. 
         Currently we only get the count for the collection and take the current time and save that in data
         """
-        count = self.database[self.collection_name].count_documents({})
+        collection = self.database[self.collection_name]
+        count = collection.count_documents({})
         timestamp = time.localtime()
         data_entry = [count, timestamp]
         self.data.append(data_entry)
