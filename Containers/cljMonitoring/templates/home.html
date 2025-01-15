@@ -3,9 +3,44 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 
 <section class = "content">
-    <header></header>
+    <header>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/luxon@^3"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@^1"></script>
+    </header>
     <body>
         <h2>Monitoring service</h2>
         <p>Work in progress!!</p>
+
+        <canvas id="filesChart"></canvas>
+        <script>
+            var ctx = document.getElementById("filesChart").getContext('2d');
+            new Chart(ctx, 
+                {
+                    type: "line",
+                    data: 
+                    {
+                        datasets: 
+                        [{
+                            data:
+                            [
+                                {%for item in files_data%}{ 'x': "{{item['x']}}", 'y': {{item['y']}} },
+                                {%endfor%}
+                            ],
+                            {#label: "Lable for data"#}
+                        }]
+                    },
+                    options: 
+                    {
+                        scales:
+                        {
+                            x:
+                            {
+                                type: "time"
+                            }
+                        }
+                    }
+                }
+            );
     </body>
 </section>
