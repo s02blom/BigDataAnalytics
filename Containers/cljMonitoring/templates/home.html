@@ -27,7 +27,7 @@
                         [{
                             data:
                             [
-                                {%for item in files_data%}{ 'x': "{{item['x']}}", 'y': {{item['y']}} },
+                                {% for x, y in zip(files_data["x"], files_data["y"]) %} { 'x': "{{x}}", 'y': {{y}} },
                                 {%endfor%}
                             ],
                             {#label: "Lable for data"#}
@@ -45,7 +45,7 @@
                         plugins: {
                             title: {
                                 display: true,
-                                text: "Chart for Files"
+                                text: "{{files_data['chart_name']}}"
                             }
                         }
                     }
