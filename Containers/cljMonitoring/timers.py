@@ -44,7 +44,7 @@ class CollectionTimer(Timer):
         self.collection_name = collection_name
         self.database = database
         self.interval = int(interval)
-        self.data = {"count": [], "time": []}
+        self.data = {"count": [], "time": [], "iso_time": []}
         super().__init__()
 
     def timer(self) -> None:
@@ -57,7 +57,8 @@ class CollectionTimer(Timer):
         timestamp = time.localtime()
         self.data["count"].append(count)
         self.data["time"].append(timestamp)
-        
+        self.data["iso_time"].append(time.strftime('%H:%M:%S', timestamp))
+        # print(f"{self.collection_name}, {count}", flush=True)
 
     def get_dataframe(self) -> pd.DataFrame:
         return pd.DataFrame(self.data, columns=["count", "time"])
