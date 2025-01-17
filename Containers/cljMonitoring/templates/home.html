@@ -12,7 +12,10 @@
         <h2>Monitoring service</h2>
         <p>Work in progress!!</p>
 
-        <canvas id="filesChart"></canvas>
+        <div class="chart-container">
+            <canvas id="filesChart"></canvas>
+        </div>
+        
         <script>
             var ctx = document.getElementById("filesChart").getContext('2d');
             new Chart(ctx, 
@@ -38,9 +41,16 @@
                             {
                                 type: "time"
                             }
+                        },
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: "Chart for Files"
+                            }
                         }
                     }
                 }
             );
+        </script>
     </body>
 </section>
