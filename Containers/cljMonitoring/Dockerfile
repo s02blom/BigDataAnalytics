@@ -10,3 +10,4 @@ COPY . .
 EXPOSE $FLASK_RUN_PORT
 
 ENTRYPOINT ["flask", "--app", "monitoring", "run", "--debug"]
+# ENTRYPOINT ["flask", "--app", "monitoring", "run", "--debug", "--no-reload"]  For avoiding the double restarts of flask in the beginning
