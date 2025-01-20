@@ -13,12 +13,32 @@
         <p>Work in progress!!</p>
 
         <div class="chart-container">
-            <canvas id="filesChart"></canvas>
+            <canvas id="files"></canvas>
         </div>
         
+        <div class="chart-container">
+            <canvas id="chunks"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="candidates"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="clones"></canvas>
+        </div>
+
         <script>
-            var ctx = document.getElementById("filesChart").getContext('2d');
-            new Chart(ctx, 
+            var fileContext = document.getElementById("filesChart").getContext('2d');
+            var chunksContext = document.getElementById("chunksChart").getContext('2d');
+            var candidatesContext = document.getElementById("candidatesChart").getContext('2d');
+            var clonesContext = document.getElementById("clonesChart").getContext('2d');
+
+
+            {% for name, chartData in chart_data.items() %}
+            
+            var context = document.getElementById("{{name}}").getContext('2d');
+            new Chart(context, 
                 {
                     type: "line",
                     data: 
@@ -27,7 +47,8 @@
                         [{
                             data:
                             [
-                                {% for x, y in zip(files_data["x"], files_data["y"]) %} { 'x': "{{x}}", 'y': {{y}} },
+                                {%  for x, y in zip(chartData["x"], chartData["y"]) %}
+                                    {'x': "{{x}}", 'y': {{y}}},
                                 {%endfor%}
                             ],
                             {#label: "Lable for data"#}
@@ -45,12 +66,14 @@
                         plugins: {
                             title: {
                                 display: true,
-                                text: "{{files_data['chart_name']}}"
+                                text: "{{ chartData[chart_title] }}"
                             }
                         }
                     }
                 }
             );
+
+            {%endfor%}
         </script>
     </body>
 </section>

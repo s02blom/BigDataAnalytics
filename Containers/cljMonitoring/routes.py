@@ -7,9 +7,9 @@ def home():
     chart_data = {}    
     for timer in g.timers.values():
         timer_data = {}
+        timer_data["chart_title"] = f"Chart for {timer.collection_name}"
         timer_data["y"] = timer.data["count"]
         timer_data["x"] = timer.data["iso_time"]
-        timer_data["chart_name"] = f"Chart for {timer.collection_name}"
         chart_data[timer.collection_name] = timer_data
 
-    return render_template("home.html", files_data=chart_data["files"], zip=zip)
+    return render_template("home.html", chart_data=chart_data, zip=zip)
