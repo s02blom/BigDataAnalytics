@@ -39,15 +39,16 @@ def main():
     sleep(15)   # Sleeping for 15s to ensure that the database has had time to start up
     start_time = localtime()
     timers = {}
-    for name in COLLECTIONS:
-        new_connection = get_connection()
-        timer = CollectionTimer(collection_name=name, database=new_connection, interval=os.environ.get("SAMPLE_RATE"))
+    db_connection = get_connection()
+    for name in COLLECTIONS:        
+        timer = CollectionTimer(collection_name=name, database=db_connection, interval=os.environ.get("SAMPLE_RATE"))
         timer.start()
         timers[name] = timer
 
     # Add variable to g, meaning they are avilable to anyone
     app.app_ctx_globals_class.start_time = start_time
     app.app_ctx_globals_class.timers = timers
+    app.app_ctx_globals_class.db_connection = db_connection
 
     return app
 

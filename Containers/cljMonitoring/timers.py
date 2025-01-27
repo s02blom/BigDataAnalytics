@@ -79,5 +79,5 @@ class CollectionTimer(Timer):
 
     def stop(self):
         """Stops the timer and closes the database connection. """
-        db.close_connection(self.database)
+        # db.close_connection(self.database)
         super().stop()
