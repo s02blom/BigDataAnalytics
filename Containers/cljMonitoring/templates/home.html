@@ -44,7 +44,7 @@
                                 {%  for x, y in zip(chartData["x"], chartData["y"]) %} {'x': "{{x}}", 'y': {{y}}},
                                 {%endfor%}
                             ],
-                            {#label: "Lable for data"#}
+                            label: "{{name}}"
                         }]
                     },
                     options: 

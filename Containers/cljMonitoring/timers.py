@@ -54,13 +54,13 @@ class CollectionTimer(Timer):
         Currently we only get the count for the collection and take the current time and save that in data
         """
         if not (self.self_stop % 100):
-            if (self.check_if_self_stop()):
+            if (self.check_if_self_stop(5)):
                 self.stop()
         collection = self.database[self.collection_name]
         count = collection.count_documents({})
         if count != 0:
             timestamp = time.localtime()
-            self.data["count"].append(count)
+            self.data["count"].append(int(count))
             self.data["time"].append(timestamp)
             self.data["iso_time"].append(time.strftime('%H:%M:%S', timestamp))
             self.self_stop += 1
