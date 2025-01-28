@@ -58,7 +58,7 @@ class CollectionTimer(Timer):
                 self.stop()
         collection = self.database[self.collection_name]
         count = collection.count_documents({})
-        if count != 0:
+        if self.self_stop > 0 or count != 0:
             timestamp = time.localtime()
             self.data["count"].append(int(count))
             self.data["time"].append(timestamp)
