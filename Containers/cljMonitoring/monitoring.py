@@ -1,5 +1,5 @@
 import os
-from time import sleep, localtime
+from time import sleep
 from flask import Flask
 from .timers import CollectionTimer
 from .db import get_connection
@@ -37,7 +37,6 @@ def main():
     register_blueprints(app)
     print("Sleeping to wait for database start up", flush=True)
     sleep(15)   # Sleeping for 15s to ensure that the database has had time to start up
-    start_time = localtime()
     timers = {}
     db_connection = get_connection()
     for name in COLLECTIONS:        
@@ -46,7 +45,6 @@ def main():
         timers[name] = timer
 
     # Add variable to g, meaning they are avilable to anyone
-    app.app_ctx_globals_class.start_time = start_time
     app.app_ctx_globals_class.timers = timers
     app.app_ctx_globals_class.db_connection = db_connection
 
