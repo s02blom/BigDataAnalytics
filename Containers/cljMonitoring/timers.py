@@ -85,3 +85,9 @@ class CollectionTimer(Timer):
     def get_dataframe(self) -> pd.DataFrame:
         return pd.DataFrame(self.data, columns=["count", "time", "iso_time"])
     
+    def to_excel(self) -> None:
+        dataframe = self.get_dataframe()
+        dataframe.drop("time", axis=1, inplace=True)
+        filename = f"{self.collection_name}-{str(time.time())}.xlsx"
+        dataframe.to_excel(filename)
+        
