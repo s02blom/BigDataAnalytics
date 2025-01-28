@@ -78,8 +78,7 @@ class CollectionTimer(Timer):
 
     def stop(self) -> None:
         """Stops the timer and closes the database connection. """
-        # print(f"{self.collection_name} stopping...", flush=True)
-        self.to_excel()
+        self.to_csv()
         super().stop()
 
     def get_dataframe(self) -> pd.DataFrame:
@@ -91,3 +90,8 @@ class CollectionTimer(Timer):
         filename = f"{self.collection_name}-{str(time.time())}.xlsx"
         dataframe.to_excel(filename)
         
+    def to_csv(self) -> None:
+        dataframe = self.get_dataframe()
+        dataframe.drop("time", axis=1, inplace=True)
+        filename = f"{self.collection_name}-{str(time.time())}.csv"
+        dataframe.to_csv(filename, sep=";", index=False)
