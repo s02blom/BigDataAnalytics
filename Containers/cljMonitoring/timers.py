@@ -72,12 +72,16 @@ class CollectionTimer(Timer):
         Parameters:
         min_similarity_length (int): the number of items looked at to see if they are the same
         """
-        return len(self.data["count"]) >= min_similarity_length and len(set(self.data["count"])) == 1
+        length = len(self.data["count"]) >= min_similarity_length
+        number_of_items_from_the_end = len(set(self.data["count"][-min_similarity_length:])) == 1
+        return length and number_of_items_from_the_end
+
+    def stop(self) -> None:
+        """Stops the timer and closes the database connection. """
+        # print(f"{self.collection_name} stopping...", flush=True)
+        self.to_excel()
+        super().stop()
 
     def get_dataframe(self) -> pd.DataFrame:
-        return pd.DataFrame(self.data, columns=["count", "time"])
-
-    def stop(self):
-        """Stops the timer and closes the database connection. """
-        # db.close_connection(self.database)
-        super().stop()
+        return pd.DataFrame(self.data, columns=["count", "time", "iso_time"])
+    

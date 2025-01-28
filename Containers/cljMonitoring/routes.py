@@ -1,5 +1,4 @@
 from flask import Blueprint, render_template, g
-import time
 blueprint = Blueprint("main", __name__)
 
 @blueprint.route("/", methods=["GET"])
