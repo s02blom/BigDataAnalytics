@@ -17,6 +17,11 @@ codeStream: corpusVolume
 cljDetector: corpusVolume
 	@docker compose -f all-at-once.yaml up
 
+monitoring:
+	@docker compose -f all-at-once.yaml up dbstorage -d
+	@docker build "Containers/cljMonitoring" -t progress-monitoring-web
+	@docker run -p 5000:5000 progress-monitoring-web 
+
 mongodb:
 	@docker compose -f all-at-once.yaml up dbstorage
 
@@ -32,7 +37,7 @@ cleanStream:
 	@docker compose -f "./stream-of-code.yaml" down
 
 cleanCljDetector:
-	@docker compose -f "./all-at-once.yaml" downs
+	@docker compose -f "./all-at-once.yaml" down
 
 # clean:
 # 	@docker rm -f qc-getter stream/cs-generator stream/cs-consumer

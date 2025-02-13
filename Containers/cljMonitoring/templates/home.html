@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<title>Monitoring</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+
+<section class = "content">
+    <header>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/luxon@^3"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@^1"></script>
+    </header>
+    <body>
+        <h2>Monitoring service</h2>
+
+        <div class="chart-container">
+            <canvas id="files"></canvas>
+        </div>
+        
+        <div class="chart-container">
+            <canvas id="chunks"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="candidates"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="clones"></canvas>
+        </div>
+
+        <script>
+            {% for name, chartData in chart_data.items() %}
+            
+            var context = document.getElementById("{{name}}").getContext('2d');
+            new Chart(context, 
+                {
+                    type: "line",
+                    data: 
+                    {
+                        datasets: 
+                        [{
+                            data:
+                            [
+                                {%  for x, y in zip(chartData["x"], chartData["y"]) %} {'x': "{{x}}", 'y': {{y}}},
+                                {%endfor%}
+                            ],
+                            label: "{{name}}"
+                        }]
+                    },
+                    options: 
+                    {
+                        scales:
+                        {
+                            x:
+                            {
+                                type: "time"
+                            }
+                        },
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: "{{ chartData['chart_title'] }}"
+                            }
+                        }
+                    }
+                }
+            );
+
+            {%endfor%}
+        </script>
+    </body>
+</section>

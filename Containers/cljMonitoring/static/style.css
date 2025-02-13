@@ -1,0 +1,63 @@
+body {
+    background-color: #F7EFD6;
+}
+
+.box{
+    position: relative;
+    width: 85%;
+    min-height: 100px;
+    max-height: 1000px;
+    border: 2px solid black;
+    margin: 2%;
+    /*padding-inline: 10%;*/
+}
+
+.button{
+    position: absolute;
+    right :2%;
+    bottom: 5%;
+}
+
+.sql{
+    position: relative;
+    width: 85%;
+    max-height: 350px;
+    /*min-height: 100px;
+    max-height: 1000px;*/
+    border: 2px solid black;
+}
+
+table{
+    border-collapse: collapse;
+    background-color: white;
+    width: 100%;
+}
+
+tr:nth-child(even){
+    background-color: #f2f2f2;
+}
+
+tr:hover{
+    background-color: #a7bccc;
+}
+
+th{
+    text-align: left;
+}
+
+hr{
+    width: 90%;
+    border-width: 3px;
+}
+
+.chart-container {
+    width: 50vw;
+    height: 40vh;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
